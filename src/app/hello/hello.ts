@@ -1,4 +1,4 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, effect, computed } from '@angular/core';
 
 @Component({
   selector: 'app-hello',
@@ -8,28 +8,32 @@ import { Component, signal, computed } from '@angular/core';
 })
 export class Hello {
 
-  protected title = "welcome to moder angular"
+  protected title = "welcome to modern angular";
 
   protected isDisable = false;
 
-  protected onClick() :void{
+  protected onClick(): void {
     console.log("Button clicked");
     this.isDisable = !this.isDisable;
   }
 
   protected count = signal(0);
 
-  protected doubleCount = computed( ()=> this.count() * 2); // a função comuted calcula um valor a partir de um signal
+  protected doubleCount = computed(() => this.count() * 2);
 
-  protected increaseCounter() :void{
+  private readonly countLog = effect((): void => {
+    console.log('Count changed:', this.count());
+  });
+
+  protected increaseCounter(): void {
     this.count.update(value => value + 1);
   }
 
-  protected decreaseCounter() :void{
+  protected decreaseCounter(): void {
     this.count.update(value => value - 1);
   }
 
-  protected resetCounter() :void{
+  protected resetCounter(): void {
     this.count.set(0);
   }
 }
